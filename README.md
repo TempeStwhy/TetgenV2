@@ -15,7 +15,7 @@ cmake -S . -B build
 cmake --build build -j
 ```
 
-> - 若 OpenGL/GLUT 可用，会构建 `tet_view_gl`。
+> - 若 OpenGL/GLUT 可用，会构建真实渲染版 `tet_view_gl`；若不可用，会自动构建 fallback 版 `tet_view_gl`（提示安装依赖）。
 > - 若你需要 VTK viewer，可开启：`-DENABLE_VTK_VIEWER=ON`。
 
 ## 2. 使用
@@ -38,13 +38,13 @@ cmake --build build -j
 
 直接打开生成的 `*.vtu`。
 
-### 方案 B：OpenGL Viewer（无需 VTK）
+### 方案 B：OpenGL Viewer（优先）
 
 ```bash
 ./build/tet_view_gl data/volume_tet.nas
 ```
 
-操作：方向键旋转，`+/-` 缩放，`q`/`ESC` 退出。
+若是 fallback 版，会提示缺少 OpenGL/GLUT 依赖；安装后即可获得交互查看功能（方向键旋转，`+/-` 缩放，`q`/`ESC` 退出）。
 
 ### 方案 C：VTK Viewer（可选）
 
@@ -75,4 +75,27 @@ cmake --build build -j
 
 - OpenGL viewer：`-DENABLE_OPENGL_VIEWER=ON|OFF`
 - VTK viewer：`-DENABLE_VTK_VIEWER=ON|OFF`
+
+## 6. OpenGL/GLUT 依赖安装
+
+如果你的环境缺少 OpenGL/GLUT，可以直接执行仓库内脚本：
+
+- Ubuntu/Debian:
+
+```bash
+./scripts/install_opengl_glut_ubuntu.sh
+```
+
+- Windows (PowerShell + vcpkg):
+
+```powershell
+./scripts/install_opengl_glut_windows.ps1
+```
+
+然后重新配置构建：
+
+```bash
+cmake -S . -B build
+cmake --build build -j
+```
 

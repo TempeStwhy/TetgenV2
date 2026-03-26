@@ -130,7 +130,7 @@ void special(int key, int, int) {
 bool load_nas_tets(const std::string& path) {
   std::ifstream in(path);
   if (!in) {
-    std::cerr << "无法打开文件: " << path << '\n';
+    std::cerr << "Failed to open file: " << path << '\n';
     return false;
   }
 
@@ -168,7 +168,7 @@ bool load_nas_tets(const std::string& path) {
   }
 
   if (g_points.empty() || tets.empty()) {
-    std::cerr << "未读取到 GRID/CTETRA，请输入四面体 NAS 文件。\n";
+    std::cerr << "No GRID/CTETRA found. Please provide a tetrahedral NAS file.\n";
     return false;
   }
 
@@ -227,7 +227,7 @@ bool load_nas_tets(const std::string& path) {
 
 int main(int argc, char** argv) {
   if (argc < 2) {
-    std::cout << "用法: tet_view_gl <tet_mesh.nas>\n";
+    std::cout << "Usage: tet_view_gl <tet_mesh.nas>\n";
     return 1;
   }
 
@@ -248,7 +248,7 @@ int main(int argc, char** argv) {
   glutKeyboardFunc(keyboard);
   glutSpecialFunc(special);
 
-  std::cout << "操作说明: 方向键旋转, +/- 缩放, q 或 ESC 退出\n";
+  std::cout << "Controls: Arrow keys rotate, +/- zoom, q or ESC exits.\n";
   glutMainLoop();
   return 0;
 }

@@ -44,7 +44,7 @@ tetgenio build_tetgen_input(const SurfaceMesh& surf) {
 
 TetMesh build_output_mesh(const tetgenio& out) {
   if (out.numberofpoints <= 0 || out.numberoftetrahedra <= 0) {
-    throw std::runtime_error("TetGen 未生成有效四面体网格。请检查输入是否闭合、无自交。");
+    throw std::runtime_error("TetGen did not generate a valid tetrahedral mesh. Check if the input is closed and non-self-intersecting.");
   }
 
   TetMesh mesh;
@@ -78,9 +78,9 @@ TetMesh build_output_mesh(const tetgenio& out) {
 }
 
 void print_usage() {
-  std::cout << "用法:\n"
+  std::cout << "Usage:\n"
             << "  nas2tet <input.nas> <output_tet.nas> [output.vtu] [tetgen_switches]\n\n"
-            << "示例:\n"
+            << "Example:\n"
             << "  nas2tet model.nas model_tet.nas model.vtu pq1.2a0.01\n";
 }
 
@@ -109,14 +109,14 @@ int main(int argc, char** argv) {
     write_nastran_tets(output_nas_path, mesh);
     write_vtu(output_vtu_path, mesh);
 
-    std::cout << "转换完成。\n"
-              << "  输入面网格: " << input_path << "\n"
-              << "  输出四面体网格(NAS): " << output_nas_path << "\n"
-              << "  可视化文件(VTU): " << output_vtu_path << "\n"
-              << "  节点数: " << mesh.points.size() << "\n"
-              << "  四面体数: " << mesh.tets.size() << "\n";
+    std::cout << "Conversion completed.\n"
+              << "  Input surface: " << input_path << "\n"
+              << "  Output tet mesh (NAS): " << output_nas_path << "\n"
+              << "  Visualization file (VTU): " << output_vtu_path << "\n"
+              << "  Number of points: " << mesh.points.size() << "\n"
+              << "  Number of tets: " << mesh.tets.size() << "\n";
   } catch (const std::exception& e) {
-    std::cerr << "错误: " << e.what() << '\n';
+    std::cerr << "Error: " << e.what() << '\n';
     return 2;
   }
 

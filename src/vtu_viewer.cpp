@@ -14,7 +14,7 @@
 
 int main(int argc, char** argv) {
   if (argc < 2) {
-    std::cout << "用法: tet_view <mesh.vtu>\n";
+    std::cout << "Usage: tet_view <mesh.vtu>\n";
     return 1;
   }
 
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 
   vtkUnstructuredGrid* grid = reader->GetOutput();
   if (grid == nullptr || grid->GetNumberOfCells() == 0) {
-    std::cerr << "读取 VTU 失败或网格为空: " << path << '\n';
+    std::cerr << "Failed to read VTU or mesh is empty: " << path << '\n';
     return 2;
   }
 
