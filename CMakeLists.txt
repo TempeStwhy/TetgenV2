@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(TetgenV2 LANGUAGES CXX)
 
-option(ENABLE_VTK_VIEWER "Build VTU viewer based on VTK" ON)
+option(ENABLE_VTK_VIEWER "Build VTU viewer based on VTK" OFF)
+option(ENABLE_OPENGL_VIEWER "Build OpenGL tet mesh viewer" ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,6 +24,18 @@ target_include_directories(nas2tet PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 target_link_libraries(nas2tet PRIVATE tetgen_lib)
+
+if(ENABLE_OPENGL_VIEWER)
+  find_package(OpenGL QUIET)
+  find_package(GLUT QUIET)
+  if(OpenGL_FOUND AND GLUT_FOUND)
+    add_executable(tet_view_gl src/opengl_viewer.cpp)
+    target_link_libraries(tet_view_gl PRIVATE OpenGL::GL GLUT::GLUT OpenGL::GLU)
+    message(STATUS "OpenGL/GLUT found, tet_view_gl will be built.")
+  else()
+    message(WARNING "OpenGL/GLUT not found, skip tet_view_gl target.")
+  endif()
+endif()
 
 if(ENABLE_VTK_VIEWER)
   find_package(VTK QUIET COMPONENTS
