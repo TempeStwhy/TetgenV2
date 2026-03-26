@@ -9,23 +9,25 @@
 
 namespace {
 
-tetgenio build_tetgen_input(const SurfaceMesh& surf) {
-  tetgenio in;
-  in.firstnumber = 0;
-  in.numberofpoints = static_cast<int>(surf.points.size());
-  in.pointlist = new REAL[in.numberofpoints * 3];
+void build_tetgen_input(const SurfaceMesh& surf, tetgenio* in) {
+  if (in == nullptr) {
+    throw std::runtime_error("Null tetgenio pointer.");
+  }
+  in->firstnumber = 0;
+  in->numberofpoints = static_cast<int>(surf.points.size());
+  in->pointlist = new REAL[in->numberofpoints * 3];
 
-  for (int i = 0; i < in.numberofpoints; ++i) {
-    in.pointlist[i * 3 + 0] = surf.points[i].x;
-    in.pointlist[i * 3 + 1] = surf.points[i].y;
-    in.pointlist[i * 3 + 2] = surf.points[i].z;
+  for (int i = 0; i < in->numberofpoints; ++i) {
+    in->pointlist[i * 3 + 0] = surf.points[i].x;
+    in->pointlist[i * 3 + 1] = surf.points[i].y;
+    in->pointlist[i * 3 + 2] = surf.points[i].z;
   }
 
-  in.numberoffacets = static_cast<int>(surf.triangles.size());
-  in.facetlist = new tetgenio::facet[in.numberoffacets];
+  in->numberoffacets = static_cast<int>(surf.triangles.size());
+  in->facetlist = new tetgenio::facet[in->numberoffacets];
 
-  for (int i = 0; i < in.numberoffacets; ++i) {
-    tetgenio::facet& facet = in.facetlist[i];
+  for (int i = 0; i < in->numberoffacets; ++i) {
+    tetgenio::facet& facet = in->facetlist[i];
     facet.numberofpolygons = 1;
     facet.polygonlist = new tetgenio::polygon[1];
     facet.numberofholes = 0;
@@ -39,7 +41,6 @@ tetgenio build_tetgen_input(const SurfaceMesh& surf) {
     polygon.vertexlist[2] = surf.triangles[i].v[2];
   }
 
-  return in;
 }
 
 TetMesh build_output_mesh(const tetgenio& out) {
@@ -100,7 +101,8 @@ int main(int argc, char** argv) {
   try {
     const SurfaceMesh surface = read_nastran_surface(input_path);
 
-    tetgenio in = build_tetgen_input(surface);
+    tetgenio in;
+    build_tetgen_input(surface, &in);
     tetgenio out;
 
     tetrahedralize(switches.data(), &in, &out);
