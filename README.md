@@ -63,3 +63,16 @@ cmake --build build -j
 - `CQUAD4`（自动拆分为两个三角形）
 
 请确保输入是**闭合、二维流形、无自交**的外表面网格（仓库示例 `data/tetra_surface.nas` 为合法案例）。
+
+## 5. 可视化源码位置
+
+已一并提交可视化相关源码：
+
+- `src/opengl_viewer.cpp`：OpenGL/GLUT 线框查看器（`tet_view_gl`）
+- `src/vtu_viewer.cpp`：VTK 查看器（`tet_view`）
+
+你可以按需在 CMake 配置时开启/关闭对应目标：
+
+- OpenGL viewer：`-DENABLE_OPENGL_VIEWER=ON|OFF`
+- VTK viewer：`-DENABLE_VTK_VIEWER=ON|OFF`
+
